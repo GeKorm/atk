@@ -1,4 +1,6 @@
-# ATP - Aegis to KeePass
+# ATK - Aegis to KeePass 2
+
+This fork exports to the original KeePass 2 for Windows TOTP implementation.
 
 A simple tool to convert exported (and encrypted) JSON from [Aegis](https://getaegis.app/) to [KeePass](https://keepass.info/download.html) database. Notes, custom icons and Steam entries get exported as well.
 
