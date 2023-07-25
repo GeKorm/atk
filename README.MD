@@ -5,7 +5,7 @@ This fork exports to the original KeePass 2 for Windows TOTP implementation.
 A simple tool to convert exported (and encrypted) JSON from [Aegis](https://getaegis.app/) to [KeePass](https://keepass.info/download.html) database. Notes, custom icons and Steam entries get exported as well.
 
 ## Installation
-`go install github.com/graynk/atk@latest` or grab a binary from [Releases](https://github.com/graynk/atk/releases) page
+`go install github.com/GeKorm/atk-2@latest` or grab a binary from [Releases](https://github.com/GeKorm/atk-2/releases) page
 
 ## Usage
 `atk /path/to/aegis-export.json /path/to/output.kdbx`
