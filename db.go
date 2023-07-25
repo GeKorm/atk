@@ -6,6 +6,7 @@ import (
 	"github.com/tobischo/gokeepasslib/v3/wrappers"
 	"log"
 	"os"
+	"strconv"
 )
 
 type db struct {
@@ -72,14 +73,36 @@ func (e entry) ToKeePassEntry() (gokeepasslib.Entry, error) {
 			},
 		},
 		{
-			Key: "TOTP Seed",
+			Key: "Password",
+			Value: gokeepasslib.V{
+				Content:   "{TIMEOTP}",
+				Protected: wrappers.BoolWrapper{Bool: true},
+			},
+		},
+		{
+			Key: "TimeOtp-Secret-Base32",
 			Value: gokeepasslib.V{
 				Content:   e.Info.Secret,
 				Protected: wrappers.BoolWrapper{Bool: true},
 			},
 		},
+		{
+			Key: "TimeOtp-Period",
+			Value: gokeepasslib.V{
+				Content:   strconv.Itoa(e.Info.Period),
+				Protected: wrappers.BoolWrapper{Bool: true},
+			},
+		},
+		{
+			Key: "TimeOtp-Length",
+			Value: gokeepasslib.V{
+				Content:   strconv.Itoa(e.Info.Digits),
+				Protected: wrappers.BoolWrapper{Bool: true},
+			},
+		},
 	}
 	convertedEntry.Values = values
+	convertedEntry.AutoType.Enabled = wrappers.BoolWrapper{Bool: true}
 
 	return convertedEntry, nil
 }
@@ -111,7 +134,12 @@ func (d db) ToKeePass(path string, password []byte) {
 		}
 		entries = append(entries, converted)
 	}
-	db.Content.Root.Groups = []gokeepasslib.Group{{Name: "Default", Entries: entries}}
+	db.Content.Root.Groups = []gokeepasslib.Group{{
+		Name:                    "Default",
+		Entries:                 entries,
+		EnableAutoType:          wrappers.NewNullableBoolWrapper(true),
+		DefaultAutoTypeSequence: "{TIMEOTP}{ENTER}",
+	}}
 
 	err = db.LockProtectedEntries()
 	if err != nil {
